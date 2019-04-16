@@ -9,13 +9,9 @@ import java.util.List;
 
 public class ReflectionHelper {
 
-    public static <T> List<Class<T>> findClassesImpmenenting(final Class<T> interfaceClass) {
+    public static <T> List<Class<T>> findClassesImplementing(final Class<T> interfaceClass) {
 
         Package fromPackage = interfaceClass.getPackage();
-
-        if (interfaceClass == null) {
-            return null;
-        }
 
         if (fromPackage == null) {
             return null;
