@@ -1,47 +1,30 @@
 package app;
 
-// import java.io.ObjectOutputStream;
-// import java.net.ServerSocket;
-// import java.net.Socket;
-// import java.util.Date;
-import java.util.InputMismatchException;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
-import java.util.Scanner;
 
 import models.ICommand;
 
-public class Application {
-
-    public static List<ICommand> availableCommands;
-
-    public static void main(String[] args)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        availableCommands = ICommand.searchCommands();
-        Scanner scanner = new Scanner(System.in);
-        String entrada;
-        ICommand comando;
-
-        do {
-            System.out.print("Insira o comando: ");
-            entrada = scanner.nextLine();
-            try {
-                entrada = validateInput(entrada);
-                comando = ICommand.searchAndReturnCommand(entrada);
-                System.out.println(comando.run());
-            } catch (InputMismatchException | NullPointerException e) {
-                System.out.println(e.getMessage());
+public class Application extends Thread {
+    
+    public static List<ICommand> AVAILABLE_COMMANDS;
+    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        AVAILABLE_COMMANDS = ICommand.searchCommands();
+        int port = 1234;
+        
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
+            System.out.println("Servidor rodando na porta " + port);
+            while (true) {
+                Socket conexao = serverSocket.accept();
+                Thread newThread = new Server(conexao);
+                newThread.start();
             }
-        } while (true);
-    }
-
-    private static String validateInput(String input) throws InputMismatchException {
-        boolean startsWith = input.startsWith("\\");
-
-        if (!startsWith) {
-            throw new InputMismatchException(input);
+            
+        } catch (IOException e) {
+            System.out.println("IOException: " + e);
         }
-
-        input = input.replaceAll("\\\\", "");
-        return input;
     }
 }
