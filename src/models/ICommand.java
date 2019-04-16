@@ -15,7 +15,7 @@ import helpers.ReflectionHelper;
 public abstract class ICommand {
 
     protected String text = "";
-    protected List<String> params;
+    protected String param;
 
     /**
      * Este método é chamado para rodar o comando requerido
@@ -26,8 +26,13 @@ public abstract class ICommand {
      */
     public abstract String run();
 
+    public void setParam(String param) {
+        this.param = param;
+    }
+
     /**
      * Este método é chamado caso ele seja usado de maneira errada
+     * ou quando o usuário quiser saber o que os comandos fazem
      * 
      * @return Dica de uso do comando
      */
@@ -40,7 +45,7 @@ public abstract class ICommand {
     }
 
     public static ICommand searchAndReturnCommand(String commandString) {
-        for (ICommand command : Application.availableCommands) {
+        for (ICommand command : Application.AVAILABLE_COMMANDS) {
             String nameClass = command.getClass().getName();
             String onlyNameClass = getOnlyNameClass(nameClass);
 
@@ -54,7 +59,7 @@ public abstract class ICommand {
 
     public static List<ICommand> searchCommands()
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        List<Class<ICommand>> findCommands = ReflectionHelper.findClassesImpmenenting(ICommand.class);
+        List<Class<ICommand>> findCommands = ReflectionHelper.findClassesImplementing(ICommand.class);
         List<ICommand> commands = new ArrayList();
 
         for (Class<ICommand> command : findCommands) {

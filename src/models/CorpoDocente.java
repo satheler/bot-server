@@ -11,16 +11,16 @@ public class CorpoDocente extends ICommand {
 
     @Override
     public String run() {
-        super.text += "\n====================================================\n\n";
-        super.text += "Aguarde...\n";
+        super.text += "\n====================================================\n";
+        super.text += "Aguarde...";
 
-        try {
-            APIHelper api = new APIHelper("https://spreadsheets.google.com/feeds/list/1l7Z2zoceNTvaEu_154X0DhAJ0f-0WCqzrZ7m420LF00/6/public/values?alt=json");
-            this.text += api.getData();
-            // this.text += api;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // try {
+        //     APIHelper api = new APIHelper("https://spreadsheets.google.com/feeds/list/1l7Z2zoceNTvaEu_154X0DhAJ0f-0WCqzrZ7m420LF00/6/public/values?alt=json");
+        //     this.text += api.getData();
+        //     // this.text += api;
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
         return this.text;
     }
 
