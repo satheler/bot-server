@@ -9,17 +9,14 @@ public class Comandos extends ICommand {
 
     @Override
     public String run() {
-        super.text += "\n====================================================\n\n";
-        super.text += "Comandos disponiveis: \n";
-        for (ICommand command : Application.availableCommands) {
+        super.text = "Comandos disponiveis:";
+        for (ICommand command : Application.AVAILABLE_COMMANDS) {
             if(command.usage() != null) {
-                super.text += "\t" + command.usage() + "\n";
+                super.text += "\n\t" + command.usage();
             }
         }
-        super.text += "\n====================================================\n";
 
         return super.text;
-        // System.out.println("Comando teste chamado");
     }
 
     @Override
