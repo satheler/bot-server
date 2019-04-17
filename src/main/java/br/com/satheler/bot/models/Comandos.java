@@ -1,6 +1,6 @@
-package models;
+package br.com.satheler.bot.models;
 
-import app.Application;
+import br.com.satheler.bot.app.App;
 
 /**
  * Ajuda
@@ -10,7 +10,7 @@ public class Comandos extends ICommand {
     @Override
     public String run() {
         super.text = "Comandos disponiveis:";
-        for (ICommand command : Application.AVAILABLE_COMMANDS) {
+        for (ICommand command : App.AVAILABLE_COMMANDS) {
             if(command.usage() != null) {
                 super.text += "\n\t" + command.usage();
             }
@@ -25,6 +25,5 @@ public class Comandos extends ICommand {
     }
 
 }
-        
-       
-        
+
+

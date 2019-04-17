@@ -1,4 +1,4 @@
-package models;
+package br.com.satheler.bot.models;
 
 /**
  * Feriado
@@ -10,7 +10,7 @@ public class Feriados extends ICommand {
         if(this.param == null) {
             return "Erro de uso. Esperado: " + this.usage();
         }
-        
+
         return "NÃO IMPLEMENTADO, BUT I HAVE PARAM: " + this.param;
     }
 
