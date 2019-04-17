@@ -12,28 +12,26 @@ public class APIHelper {
     private final URL url;
     private HttpURLConnection connection;
 
-    public APIHelper(String url) throws MalformedURLException, IOException {
+    public APIHelper(String url, String requestMethod) throws MalformedURLException, IOException {
         this.url = new URL(url);
-        this.configure();
+        this.configure(requestMethod);
     }
 
-    private void configure() throws IOException, RuntimeException {
+    private void configure(String requestMethod) throws IOException, RuntimeException {
         this.connection = (HttpURLConnection) this.url.openConnection();
-        this.connection.setRequestMethod("GET");
+        this.connection.setRequestMethod(requestMethod);
         this.connection.setRequestProperty("Accept", "application/json");
+        this.connection.getContentEncoding();
 
         if (this.connection.getResponseCode() != 200) {
             throw new RuntimeException("Falha - HTTP Error code: " + this.connection.getResponseCode());
         }
     }
 
-    public String getData() throws IOException {
-        InputStreamReader in = new InputStreamReader(connection.getInputStream());
+    public String response() throws IOException {
+        InputStreamReader in = new InputStreamReader(connection.getInputStream(), "UTF-8");
         BufferedReader br = new BufferedReader(in);
-        String output;
-        while ((output = br.readLine()) != null) {
-            System.out.println(output);
-        }
+        String output = br.readLine();
         
         return output;
     } 
