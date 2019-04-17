@@ -1,4 +1,4 @@
-package br.com.satheler.bot.app.models;
+package br.com.satheler.bot.models;
 
 /**
  * Docente
