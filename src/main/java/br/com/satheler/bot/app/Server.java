@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
 
-import br.com.satheler.bot.models.ICommand;
+import br.com.satheler.bot.commands.ICommand;
 
 
 /**

@@ -1,4 +1,4 @@
-package br.com.satheler.bot.models;
+package br.com.satheler.bot.commands;
 
 /**
  * Objetivo

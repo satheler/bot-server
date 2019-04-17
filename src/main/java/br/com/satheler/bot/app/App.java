@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 
-import br.com.satheler.bot.models.ICommand;
+import br.com.satheler.bot.commands.ICommand;
 
 /**
  * Hello world!

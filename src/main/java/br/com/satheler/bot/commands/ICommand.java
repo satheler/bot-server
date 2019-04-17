@@ -1,4 +1,4 @@
-package br.com.satheler.bot.models;
+package br.com.satheler.bot.commands;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

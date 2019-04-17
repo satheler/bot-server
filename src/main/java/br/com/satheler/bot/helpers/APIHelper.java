@@ -6,6 +6,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+
 
 public class APIHelper {
 
@@ -31,9 +42,9 @@ public class APIHelper {
     public String response() throws IOException {
         InputStreamReader in = new InputStreamReader(connection.getInputStream(), "UTF-8");
         BufferedReader br = new BufferedReader(in);
-        String output = br.readLine();
+        String json = br.readLine();
 
-        return output;
+        return json;
     }
 
     @Override
