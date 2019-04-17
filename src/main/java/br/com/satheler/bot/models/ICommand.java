@@ -1,12 +1,12 @@
-package models;
+package br.com.satheler.bot.models;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.Application;
-import helpers.ReflectionHelper;
+import br.com.satheler.bot.app.App;
+import br.com.satheler.bot.helpers.ReflectionHelper;
 
 /**
  * ICommand
@@ -19,7 +19,7 @@ public abstract class ICommand {
 
     /**
      * Este método é chamado para rodar o comando requerido
-     * 
+     *
      * @return void
      * @throws IOException
      * @throws MalformedURLException
@@ -33,7 +33,7 @@ public abstract class ICommand {
     /**
      * Este método é chamado caso ele seja usado de maneira errada
      * ou quando o usuário quiser saber o que os comandos fazem
-     * 
+     *
      * @return Dica de uso do comando
      */
     public String usage() {
@@ -45,7 +45,7 @@ public abstract class ICommand {
     }
 
     public static ICommand searchAndReturnCommand(String commandString) {
-        for (ICommand command : Application.AVAILABLE_COMMANDS) {
+        for (ICommand command : App.AVAILABLE_COMMANDS) {
             String nameClass = command.getClass().getName();
             String onlyNameClass = getOnlyNameClass(nameClass);
 

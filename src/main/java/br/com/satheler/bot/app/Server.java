@@ -1,4 +1,4 @@
-package app;
+package br.com.satheler.bot.app;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
 
-import models.ICommand;
+import br.com.satheler.bot.models.ICommand;
+
 
 /**
  * Server
@@ -30,10 +31,10 @@ public class Server extends Thread {
             ipAddress = this.connSocket.getRemoteSocketAddress().toString();
 
             System.out.println(ipAddress + ": conectado ao servidor!");
-            
+
             String request = entrada.readLine();
             String response = null;
-            
+
             while (request != null && !(request.trim().equals("\\sair"))) {
                 System.out.println(ipAddress + " - requisitou o comando: " + request);
                 try {
@@ -78,31 +79,31 @@ public class Server extends Thread {
         boolean startsWithBackslash = input.startsWith("\\");
         boolean startsWithQuestion = input.startsWith("?");
 
-        
+
         if (!startsWithBackslash && !startsWithQuestion) {
             throw new InputMismatchException(input);
         }
 
         return input;
     }
-    
+
     private Map<String, Object> formatDataEntry(String input) {
         Map<String, Object> inputFormatted = new HashMap<String, Object>();
-        
+
         if (input.startsWith("\\")) {
             return this.formatDataEntryCommand(input, inputFormatted);
         }
 
         inputFormatted.put("isCommand", new Boolean(false));
         inputFormatted.put("command", input.replaceAll("\\?", ""));
-        
+
         return inputFormatted;
     }
-    
+
     private Map<String, Object> formatDataEntryCommand(String input, Map<String, Object> inputFormatted) {
         inputFormatted.put("isCommand", new Boolean(true));
         input = input.replaceAll("\\\\", "");
-        
+
         String[] inputWithParams;
         inputWithParams = input.split(" ");
         inputFormatted.put("command", inputWithParams[0]);

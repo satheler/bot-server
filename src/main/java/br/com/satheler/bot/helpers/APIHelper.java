@@ -1,4 +1,4 @@
-package helpers;
+package br.com.satheler.bot.helpers;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,9 +32,9 @@ public class APIHelper {
         InputStreamReader in = new InputStreamReader(connection.getInputStream(), "UTF-8");
         BufferedReader br = new BufferedReader(in);
         String output = br.readLine();
-        
+
         return output;
-    } 
+    }
 
     @Override
     protected void finalize() throws Throwable {

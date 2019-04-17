@@ -1,4 +1,4 @@
-package helpers;
+package br.com.satheler.bot.helpers;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class ReflectionHelper {
 
     /**
      * Load all classes from a package.
-     * 
+     *
      * @param packageName
      * @return
      * @throws ClassNotFoundException
@@ -70,9 +70,9 @@ public class ReflectionHelper {
 
     /**
      * Find file in package.
-     * 
+     *
      * @param <T>
-     * 
+     *
      * @param directory
      * @param packageName
      * @return
@@ -96,3 +96,5 @@ public class ReflectionHelper {
         return classes;
     }
 }
+
+//"D:\University\Semesters\5%20Semester\RSD\RSD-T1\server\target\classes\br\com\satheler\bot\models"
