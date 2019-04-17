@@ -21,6 +21,10 @@ public class ServiceProvider {
         AVAILABLE_COMMANDS = this.searchCommands();
     }
 
+    /**
+     * Search for commands available to start the server
+     * @return List<CommandProvider> available commands
+     */
     private List<CommandProvider> searchCommands() {
         List<Class<CommandProvider>> findCommands = ReflectionHelper.findClassesImplementing(CommandProvider.class, "br.com.satheler.bot.commands");
         List<CommandProvider> commands = new ArrayList<CommandProvider>();
