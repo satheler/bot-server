@@ -29,18 +29,20 @@ public class Server extends Thread {
             PrintStream client = new PrintStream(this.connSocket.getOutputStream());
             ipAddress = this.connSocket.getRemoteSocketAddress().toString();
 
-            System.out.println(ipAddress + ": Conectado ao servidor!");
-
+            System.out.println(ipAddress + ": conectado ao servidor!");
+            
             String request = entrada.readLine();
             String response = null;
-
+            
             while (request != null && !(request.trim().equals("\\sair"))) {
+                System.out.println(ipAddress + " - requisitou o comando: " + request);
                 try {
                     response = prepareCommand(request);
                 } catch (InputMismatchException | NullPointerException e) {
                     response = e.getMessage();
                 } finally {
                     client.println(response);
+                    System.out.println(ipAddress + " - resposta efetuada.");
                     request = entrada.readLine();
                 }
             }
@@ -53,7 +55,7 @@ public class Server extends Thread {
     }
 
     private String prepareCommand(String request) throws InputMismatchException, NullPointerException {
-        validateInput(request);
+        request = validateInput(request);
         Map<String, Object> inputFormatted = formatDataEntry(request);
         ICommand comando = ICommand.searchAndReturnCommand((String) inputFormatted.get("command"));
 
@@ -70,15 +72,20 @@ public class Server extends Thread {
         return comando.usage();
     }
 
-    private void validateInput(String input) throws InputMismatchException {
+    private String validateInput(String input) throws InputMismatchException {
+        input = input.trim();
+
         boolean startsWithBackslash = input.startsWith("\\");
         boolean startsWithQuestion = input.startsWith("?");
 
+        
         if (!startsWithBackslash && !startsWithQuestion) {
             throw new InputMismatchException(input);
         }
-    }
 
+        return input;
+    }
+    
     private Map<String, Object> formatDataEntry(String input) {
         Map<String, Object> inputFormatted = new HashMap<String, Object>();
         
