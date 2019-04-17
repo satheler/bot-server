@@ -9,27 +9,31 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.satheler.bot.models.Docente;
 import br.com.satheler.bot.helpers.APIHelper;
+import br.com.satheler.bot.models.Docente;
+import br.com.satheler.bot.providers.CommandProvider;
 
 
 /**
  * CorpoDocente
  */
-public class CorpoDocente extends ICommand {
+public class CorpoDocente extends CommandProvider {
+
+    public CorpoDocente() {
+        super(true);
+    }
 
     @Override
-    public String run() {
+    public String run(List<String> params) {
         try {
-            APIHelper api = new APIHelper("https://8nwxe02dt5.execute-api.sa-east-1.amazonaws.com/rsd/docentes", "GET");
-            String response = api.response();
+            APIHelper api = new APIHelper("https://8nwxe02dt5.execute-api.sa-east-1.amazonaws.com/rsd/docentes");
+            String response = api.get();
             List<Docente> docentes = this.jsonToMap(response);
-            this.text = this.prepareString(docentes);
+            return this.prepareResponse(docentes);
         } catch (IOException e) {
             e.printStackTrace();
+            return e.getMessage();
         }
-
-        return this.text;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class CorpoDocente extends ICommand {
         return map;
     }
 
-    private String prepareString(List<Docente> list) {
+    private String prepareResponse(List<Docente> list) {
         String formatted = "";
         for (Docente docente : list) {
             if(docente.hasDoutorado) {

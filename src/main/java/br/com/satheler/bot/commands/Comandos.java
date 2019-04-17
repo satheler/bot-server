@@ -1,29 +1,29 @@
 package br.com.satheler.bot.commands;
 
-import br.com.satheler.bot.app.App;
+import java.util.List;
+
+import br.com.satheler.bot.providers.CommandProvider;
+import br.com.satheler.bot.providers.ServiceProvider;
 
 /**
  * Ajuda
  */
-public class Comandos extends ICommand {
+public class Comandos extends CommandProvider {
 
     @Override
-    public String run() {
-        super.text = "Comandos disponiveis:";
-        for (ICommand command : App.AVAILABLE_COMMANDS) {
-            if(command.usage() != null) {
-                super.text += "\n\t" + command.usage();
+    public String run(List<String> params) {
+        response = "Comandos disponiveis:";
+        for (CommandProvider command : ServiceProvider.AVAILABLE_COMMANDS) {
+            if (command.usage() != null) {
+                response += "\n\t" + command.usage();
             }
         }
 
-        return super.text;
+        return response;
     }
 
     @Override
     public String usage() {
         return super.usage() + "\t- Retorna os comandos disponiveis.";
     }
-
 }
-
-

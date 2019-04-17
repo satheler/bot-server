@@ -3,30 +3,33 @@ package br.com.satheler.bot.app;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 
-import br.com.satheler.bot.commands.ICommand;
+import br.com.satheler.bot.providers.ServiceProvider;
 
 /**
  * Hello world!
  */
 public final class App {
-    public static List<ICommand> AVAILABLE_COMMANDS;
-    public static void main(String args[]) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        AVAILABLE_COMMANDS = ICommand.searchCommands();
+
+    public static ServerSocket SERVER_SOCKET;
+    public static ServiceProvider SERVICE_PROVIDER;
+    public static void main(String args[]) throws IOException {
         int port = 1234;
 
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println("Servidor rodando na porta " + port);
+            SERVICE_PROVIDER = ServiceProvider.getInstance();
+            SERVER_SOCKET = new ServerSocket(port);
+            System.out.println("SERVIDOR RODANDO NA PORTA " + port);
             while (true) {
-                Socket conexao = serverSocket.accept();
+                Socket conexao = SERVER_SOCKET.accept();
                 Thread newThread = new Server(conexao);
                 newThread.start();
             }
 
-        } catch (IOException e) {
-            System.out.println("IOException: " + e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            SERVER_SOCKET.close();
         }
     }
 }
