@@ -9,24 +9,21 @@ import java.util.List;
 
 public class ReflectionHelper {
 
-    public static <T> List<Class<T>> findClassesImplementing(final Class<T> interfaceClass) {
-
-        Package fromPackage = interfaceClass.getPackage();
-
-        if (fromPackage == null) {
+    public static <T> List<Class<T>> findClassesImplementing(final Class<T> referrerClass, final String fromPackageName) {
+        if (referrerClass == null) {
             return null;
         }
 
         final List<Class<T>> rVal = new ArrayList<Class<T>>();
         try {
-            final Class<T>[] targets = getAllClassesFromPackage(fromPackage.getName());
+            final Class<T>[] targets = getAllClassesFromPackage(fromPackageName);
             if (targets != null) {
                 for (Class<T> aTarget : targets) {
                     if (aTarget == null) {
                         continue;
-                    } else if (aTarget.equals(interfaceClass)) {
+                    } else if (aTarget.equals(referrerClass)) {
                         continue;
-                    } else if (!interfaceClass.isAssignableFrom(aTarget)) {
+                    } else if (!referrerClass.isAssignableFrom(aTarget)) {
                         continue;
                     } else {
                         rVal.add(aTarget);
@@ -41,6 +38,15 @@ public class ReflectionHelper {
 
         return rVal;
     }
+
+    public static <T> List<Class<T>> findClassesImplementing(final Class<T> referrerClass) {
+        return findClassesImplementing(referrerClass, referrerClass.getPackage().getName());
+    }
+
+    public static <T> List<Class<T>> findClassesImplementing(final Class<T> referrerClass, final Package fromPackage) {
+        return findClassesImplementing(referrerClass, fromPackage.getName());
+    }
+
 
     /**
      * Load all classes from a package.
