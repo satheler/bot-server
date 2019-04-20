@@ -10,6 +10,11 @@ import br.com.satheler.bot.providers.ServiceProvider;
  */
 public class Comandos extends CommandProvider {
 
+    /**
+     * Método para iniciar a chamada dessa classe como comando.
+     * @param params Recebe uma lista com comandos solicitados.
+     * @return Resposta final de execução do comando dessa classe.
+     */
     @Override
     public String run(List<String> params) {
         response = "Comandos disponiveis:";
@@ -22,6 +27,10 @@ public class Comandos extends CommandProvider {
         return response;
     }
 
+    /**
+     * Método para retornar informações da classe atual que está sendo chamada.
+     * @return Conteúdo com informações do comando dessa classe. 
+     */
     @Override
     public String usage() {
         return super.usage() + "\t- Retorna os comandos disponiveis.";

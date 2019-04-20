@@ -21,12 +21,19 @@ public class Server extends Thread {
     private Socket connSocket;
     private String ipAddress;
 
+    /**
+     * Construtor para o Server.
+     * @param socket Instância de uma socket para comunicação entre diversas máquinas.
+     */
     public Server(Socket socket) {
         this.connSocket = socket;
         this.ipAddress = socket.getRemoteSocketAddress().toString().replace("/", "");
         this.log("Conectou ao servidor!");
     }
 
+    /**
+     * Método para inicializar o server a partir da sua chamada.
+     */
     public void run() {
         try {
             BufferedReader input = new BufferedReader(new InputStreamReader(this.connSocket.getInputStream()));
@@ -60,6 +67,12 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Método para retorono de mensagem de procedimentos que estão
+     * acontecendo na aplicação.
+     * @param log Recebe uma mensagem para ser apresentada no console/terminal 
+     *        de algum processo.
+     */
     private void log(String log) {
         DateFormat dateFormat = new SimpleDateFormat("[dd/MM/yyyy HH:mm:ss] - " + ipAddress + ": ");
         String now = dateFormat.format(new Date());

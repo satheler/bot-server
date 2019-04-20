@@ -10,6 +10,11 @@ import br.com.satheler.bot.providers.CommandProvider;
  */
 public class Objetivo extends CommandProvider {
 
+    /**
+     * Método para iniciar a chamada dessa classe como comando.
+     * @param params Recebe uma lista com comandos solicitados.
+     * @return Resposta final de execução do comando dessa classe.
+     */
     @Override
     public String run(List<String> params) {
         response = "O Curso de Engenharia de Software, comprometido em concretizar a missão institucional da Unipampa, tem como objetivo geral promover ensino, pesquisa e extensão em Engenharia de Software, contribuindo com o desenvolvimento sustentável da região e do país. Complementarmente, o curso tem os seguintes objetivos específicos: \n";
@@ -23,6 +28,10 @@ public class Objetivo extends CommandProvider {
         return response;
     }
 
+    /**
+     * Método para retornar informações da classe atual que está sendo chamada.
+     * @return Conteúdo com informações do comando dessa classe. 
+     */
     @Override
     public String usage() {
         return super.usage() + "\t- Retorna qual o objetivo do Curso de Engenharia de Software segundo o PPC.";
