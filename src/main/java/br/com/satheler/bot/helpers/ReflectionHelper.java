@@ -9,6 +9,13 @@ import java.util.List;
 
 public class ReflectionHelper {
 
+    /**
+     * Método para encontrar classes implementadas a partir do nome do pacote informado.
+     * @param <T> (GENÉRICO *DO TIPO T*).
+     * @param referrerClass Recebe referencia de uma classe.
+     * @param fromPackageName Recebe o nome do pacote para a verificação das classes.
+     * @return Uma lista de classes do tipo de uma referência.
+     */
     public static <T> List<Class<T>> findClassesImplementing(final Class<T> referrerClass, final String fromPackageName) {
         if (referrerClass == null) {
             return null;
@@ -39,22 +46,36 @@ public class ReflectionHelper {
         return rVal;
     }
 
+    /**
+     * Método para encontrar classes implementadas a partir da referencia de uma classe.
+     * @param <T> (GENÉRICO *DO TIPO T*).
+     * @param referrerClass Recebe referencia de uma classe.
+     * @return Uma lista de classes do tipo de uma classe referenciada.
+     */
     public static <T> List<Class<T>> findClassesImplementing(final Class<T> referrerClass) {
         return findClassesImplementing(referrerClass, referrerClass.getPackage().getName());
     }
 
+    /**
+     * Método para encontrar classes implementadas a partir do nome do pacote informado.
+     * @param <T> (GENÉRICO *DO TIPO T*).
+     * @param referrerClass Recebe referencia de uma classe.
+     * @param fromPackageName Recebe o nome do pacote para a verificação das classes.
+     * @return Uma lista de classes do tipo de uma referência.
+     */
     public static <T> List<Class<T>> findClassesImplementing(final Class<T> referrerClass, final Package fromPackage) {
         return findClassesImplementing(referrerClass, fromPackage.getName());
     }
 
 
     /**
-     * Load all classes from a package.
-     *
-     * @param packageName
-     * @return
-     * @throws ClassNotFoundException
-     * @throws IOException
+     * Método para carregar todas as classes de um pacote informado.
+     * @param packageName Recebe nome do pacote.
+     * @return Vetor de classes que estão dentro do pacote informado.
+     * @throws ClassNotFoundException É uma exceção verificada que ocorre quando um aplicativo tenta
+     *         carregar uma classe por meio de seu nome completo e não pode encontrar sua definição no 
+     *         caminho de classe.
+     * @throws IOException Sinaliza que ocorreu uma exceção de I/O de algum tipo de falha ou interrupção.
      */
     public static Class[] getAllClassesFromPackage(final String packageName)
             throws ClassNotFoundException, IOException {
@@ -75,14 +96,14 @@ public class ReflectionHelper {
     }
 
     /**
-     * Find file in package.
-     *
-     * @param <T>
-     *
-     * @param directory
-     * @param packageName
-     * @return
-     * @throws ClassNotFoundException
+     * Método para encontrar arquivos de um pacote.
+     * @param <T> (GENÉRICO *DO TIPO T*).
+     * @param directory Recebe nome do diretório.
+     * @param packageName Recebe nome do pacote.
+     * @return Lista com classes encontradas.
+     * @throws ClassNotFoundException É uma exceção verificada que ocorre quando um aplicativo tenta
+     *         carregar uma classe por meio de seu nome completo e não pode encontrar sua definição no 
+     *         caminho de classe.
      */
     public static <T> List<Class<T>> findClasses(File directory, String packageName) throws ClassNotFoundException {
         List<Class<T>> classes = new ArrayList<Class<T>>();
