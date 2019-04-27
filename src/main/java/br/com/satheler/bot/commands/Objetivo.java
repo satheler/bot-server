@@ -1,7 +1,6 @@
 package br.com.satheler.bot.commands;
 
 import java.util.List;
-import java.util.Map;
 
 import br.com.satheler.bot.providers.CommandProvider;
 
@@ -30,7 +29,7 @@ public class Objetivo extends CommandProvider {
 
     /**
      * Método para retornar informações da classe atual que está sendo chamada.
-     * @return Conteúdo com informações do comando dessa classe. 
+     * @return Conteúdo com informações do comando dessa classe.
      */
     @Override
     public String usage() {
