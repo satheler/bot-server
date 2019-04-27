@@ -7,12 +7,19 @@ import java.net.Socket;
 import br.com.satheler.bot.providers.ServiceProvider;
 
 /**
- * Hello world!
+ * Application main
  */
 public final class App {
 
     public static ServerSocket SERVER_SOCKET;
     public static ServiceProvider SERVICE_PROVIDER;
+
+    /**
+     * Método para inicializar todo o servidor e a aplicação JAVA.
+     * @param args[] Passagem de argumentos caso necessário à aplicação.
+     * @throws IOException Sinaliza que ocorreu uma exceção de I/O de algum tipo
+     *         de falha ou interrupção.
+     */
     public static void main(String args[]) throws IOException {
         int port = 1234;
 
