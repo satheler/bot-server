@@ -16,6 +16,6 @@ Este servidor tem 3 tipos de comandos. Cada comando possui uma complexidade dist
 3. **Nivel avançado:** Requer consulta externa e passagem de parâmetros.
 
 ## Uso
-O usuário atráves do [Cliente](#!soon) deverá informar um comando iniciando com “\” (backslash) para que o servidor possa identificar cada caso.
+O usuário atráves do [Cliente](https://github.com/gustavosatheler/client-server) deverá informar um comando iniciando com “\” (backslash) para que o servidor possa identificar cada caso.
 
 *Caso o usuário envie uma mensagem sem o caractere “\”, este servidor irá apenas repetir a mensagem para o cliente, sem efetuar nenhuma ação adicional.*
