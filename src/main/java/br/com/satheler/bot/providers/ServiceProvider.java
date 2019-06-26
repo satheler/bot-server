@@ -6,6 +6,10 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 
+import br.com.satheler.bot.commands.Comandos;
+import br.com.satheler.bot.commands.CorpoDocente;
+import br.com.satheler.bot.commands.Feriados;
+import br.com.satheler.bot.commands.Objetivo;
 import br.com.satheler.bot.helpers.ReflectionHelper;
 
 /**
@@ -18,7 +22,12 @@ public class ServiceProvider {
     public static CommandProvider CURRENT_COMMAND;
 
     private ServiceProvider() {
-        AVAILABLE_COMMANDS = this.searchCommands();
+        // AVAILABLE_COMMANDS = this.searchCommands();
+        AVAILABLE_COMMANDS = new ArrayList<CommandProvider>();
+        AVAILABLE_COMMANDS.add(new Comandos());
+        AVAILABLE_COMMANDS.add(new CorpoDocente());
+        AVAILABLE_COMMANDS.add(new Feriados());
+        AVAILABLE_COMMANDS.add(new Objetivo());
     }
 
     /**
@@ -65,10 +74,10 @@ public class ServiceProvider {
      * Método para preparar a requisição
      * @param request recebe uma String com o pedido da requisição.
      * @return Mapa formatado com o pedido convertido
-     * @throws InputMismatchException Lançado por um Scanner para indicar que o token recuperado 
-     *         não corresponde ao padrão para o tipo esperado ou que o token está fora do intervalo 
+     * @throws InputMismatchException Lançado por um Scanner para indicar que o token recuperado
+     *         não corresponde ao padrão para o tipo esperado ou que o token está fora do intervalo
      *         para o tipo esperado.
-     * @throws NullPointerException Lançada quando um aplicativo tenta usar alguma variável/objeto nulo 
+     * @throws NullPointerException Lançada quando um aplicativo tenta usar alguma variável/objeto nulo
      *         em um caso.
      */
     public static Map<String, Object> prepareRequest(String request) throws InputMismatchException, NullPointerException {
@@ -81,7 +90,7 @@ public class ServiceProvider {
 
     /**
      * Método para verificar se o comando é assíncrono.
-     * @return Se o comando é assíncrono. 
+     * @return Se o comando é assíncrono.
      */
     public static boolean commandIsAsynchronous() {
         return CURRENT_COMMAND.isAsynchronous();
@@ -106,8 +115,8 @@ public class ServiceProvider {
      * Método para realizar a validação do valor da entrada.
      * @param input Recebe a entrada para ser verificado.
      * @return Entrada validada.
-     * @throws InputMismatchException Lançado por um Scanner para indicar que o token recuperado 
-     *         não corresponde ao padrão para o tipo esperado ou que o token está fora do intervalo 
+     * @throws InputMismatchException Lançado por um Scanner para indicar que o token recuperado
+     *         não corresponde ao padrão para o tipo esperado ou que o token está fora do intervalo
      *         para o tipo esperado.
      */
     private static String validateInput(String input) throws InputMismatchException {
@@ -126,7 +135,7 @@ public class ServiceProvider {
     /**
      * Método para realizar a validação dos dados de entrada.
      * @param input Recebe os valores dos dados para serem validados.
-     * @return Uma mapa com a validação dos dados de entrada. 
+     * @return Uma mapa com a validação dos dados de entrada.
      */
     private static Map<String, Object> formatDataEntry(String input) {
         Map<String, Object> inputFormatted = new HashMap<String, Object>();
@@ -145,7 +154,7 @@ public class ServiceProvider {
      * Método para realizar a formatação do comando de entrada dos Dados.
      * @param input Recebe os valores dos dados para serem validados.
      * @param inputFormatted Recebe os valores de entradas formatados.
-     * @return Uma mapa com a validação dos comandos de entrada dos dados. 
+     * @return Uma mapa com a validação dos comandos de entrada dos dados.
      */
     private static Map<String, Object> formatDataEntryCommand(String input, Map<String, Object> inputFormatted) {
         inputFormatted.put("isCommand", new Boolean(true));

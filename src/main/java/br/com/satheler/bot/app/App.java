@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import br.com.satheler.bot.providers.CommandProvider;
 import br.com.satheler.bot.providers.ServiceProvider;
 
 /**
@@ -25,6 +26,7 @@ public final class App {
 
         try {
             SERVICE_PROVIDER = ServiceProvider.getInstance();
+            showCommands();
             SERVER_SOCKET = new ServerSocket(port);
             System.out.println("SERVIDOR RODANDO NA PORTA " + port);
             while (true) {
@@ -38,5 +40,15 @@ public final class App {
         } finally {
             SERVER_SOCKET.close();
         }
+    }
+
+    public static void showCommands() {
+        System.out.print("Comandos carregados: | ");
+        for (CommandProvider command : SERVICE_PROVIDER.AVAILABLE_COMMANDS) {
+            Class nameClass = command.getClass();
+            String commandName = SERVICE_PROVIDER.getOnlyNameClass(nameClass);
+            System.out.print(commandName + " | ");
+        }
+        System.out.println();
     }
 }
