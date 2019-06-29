@@ -77,7 +77,7 @@ public class ReflectionHelper {
      *         caminho de classe.
      * @throws IOException Sinaliza que ocorreu uma exceção de I/O de algum tipo de falha ou interrupção.
      */
-    public static Class[] getAllClassesFromPackage(final String packageName)
+    public static <T> Class<T>[] getAllClassesFromPackage(final String packageName)
             throws ClassNotFoundException, IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;
@@ -88,7 +88,7 @@ public class ReflectionHelper {
             URL resource = resources.nextElement();
             dirs.add(new File(resource.getFile()));
         }
-        ArrayList<Class> classes = new ArrayList<Class>();
+        ArrayList<Class<T>> classes = new ArrayList<Class<T>>();
         for (File directory : dirs) {
             classes.addAll(findClasses(directory, packageName));
         }

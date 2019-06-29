@@ -39,7 +39,7 @@ public class ServiceProvider {
         List<CommandProvider> commands = new ArrayList<CommandProvider>();
 
         for (Class<CommandProvider> command : findCommands) {
-            Class cls;
+            Class<?> cls;
             try {
                 cls = Class.forName(command.getName());
                 CommandProvider found = (CommandProvider) cls.newInstance();
@@ -59,7 +59,7 @@ public class ServiceProvider {
      */
     public static CommandProvider searchAndReturnCommand(String commandString) {
         for (CommandProvider command : AVAILABLE_COMMANDS) {
-            Class nameClass = command.getClass();
+            Class<?> nameClass = command.getClass();
             String onlyNameClass = getOnlyNameClass(nameClass);
 
             if (onlyNameClass.equalsIgnoreCase(commandString)) {
