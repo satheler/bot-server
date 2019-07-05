@@ -63,6 +63,7 @@ public class Server extends Thread {
             this.connSocket.close();
         } catch (IOException e) {
         } finally {
+            App.APP.notifyFinishConnection();
             this.log("Desconectado.");
         }
     }
@@ -70,7 +71,7 @@ public class Server extends Thread {
     /**
      * Método para retorono de mensagem de procedimentos que estão
      * acontecendo na aplicação.
-     * @param log Recebe uma mensagem para ser apresentada no console/terminal 
+     * @param log Recebe uma mensagem para ser apresentada no console/terminal
      *        de algum processo.
      */
     private void log(String log) {

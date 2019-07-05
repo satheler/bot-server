@@ -36,29 +36,34 @@ public final class App implements Watcher, DataMonitorListener {
     public static ServerSocket SERVER_SOCKET;
     public static ServiceProvider SERVICE_PROVIDER;
 
+    private int numberOfConnections;
+
+    private String host;
     private int serverPort;
     private String zNode;
     private DataMonitor dataMonitor;
     private ZooKeeper zookeeper;
 
     private App(String hostPort, String zNode, int serverPort) throws IOException {
+        this.host = this.getMyIP();
         this.serverPort = serverPort;
-        this.zNode = zNode;
+        this.numberOfConnections = 0;
+        this.zNode = "/" + zNode;
         this.zookeeper = new ZooKeeper(hostPort, 3000, this);
-        this.dataMonitor = new DataMonitor(this.zookeeper, zNode, null, this);
+        this.dataMonitor = new DataMonitor(this.zookeeper, this.zNode, null, this);
     }
 
-    public void configureZookeeperNode(String zNode, int serverPort)
-            throws KeeperException, InterruptedException, Exception {
-        Stat nodeExists = this.zookeeper.exists(zNode, false);
+    public void configureZookeeperNode() throws KeeperException, InterruptedException, Exception {
+        Stat nodeExists = this.zookeeper.exists(this.zNode, false);
         if (nodeExists != null) {
-            throw new Exception("Already zookeeper node exists.");
+            throw new Exception("Already zookeeper node exists");
         }
 
-        String host = this.getMyIP();
-        String hostPort = host + ":" + serverPort;
+        this.zookeeper.create(zNode, this.zNodeDataToBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+    }
 
-        this.zookeeper.create(zNode, hostPort.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+    private byte[] zNodeDataToBytes() {
+        return (this.numberOfConnections + ":" + this.host + ":" + this.serverPort).getBytes();
     }
 
     private String getMyIP() {
@@ -67,7 +72,6 @@ public final class App implements Watcher, DataMonitorListener {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
                 NetworkInterface iface = interfaces.nextElement();
-                // filters out 127.0.0.1 and inactive interfaces
                 if (iface.isLoopback() || !iface.isUp())
                     continue;
 
@@ -75,16 +79,13 @@ public final class App implements Watcher, DataMonitorListener {
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
 
-                    // *EDIT*
                     if (addr instanceof Inet6Address)
                         continue;
 
                     ip = addr.getHostAddress();
-                    System.out.println(iface.getDisplayName() + " " + ip);
                 }
             }
         } catch (SocketException e) {
-            throw new RuntimeException(e);
         }
 
         return ip;
@@ -92,7 +93,7 @@ public final class App implements Watcher, DataMonitorListener {
 
     /**
      * Método para inicializar todo o servidor e a aplicação JAVA.
-     * 
+     *
      * @param args[] Passagem de argumentos caso necessário à aplicação.
      * @throws IOException Sinaliza que ocorreu uma exceção de I/O de algum tipo de
      *                     falha ou interrupção.
@@ -110,12 +111,10 @@ public final class App implements Watcher, DataMonitorListener {
 
         try {
             APP = new App(hostPort, zNode, port);
-            APP.configureZookeeperNode(zNode, port);
+            APP.configureZookeeperNode();
             shutdownServerListener();
             executeServer(port);
-
         } catch (Exception e) {
-            // e.printStackTrace();
             System.err.println("Error: " + e.getMessage());
             System.exit(3);
         }
@@ -130,6 +129,7 @@ public final class App implements Watcher, DataMonitorListener {
             System.out.println("SERVIDOR RODANDO NA PORTA " + port);
             while (true) {
                 Socket conexao = SERVER_SOCKET.accept();
+                APP.notifyNewConnection();
                 Thread newThread = new Server(conexao);
                 newThread.start();
             }
@@ -139,6 +139,26 @@ public final class App implements Watcher, DataMonitorListener {
         } finally {
             SERVER_SOCKET.close();
         }
+    }
+
+    public void notifyNewConnection() {
+        this.numberOfConnections++;
+        try {
+            this.zookeeper.setData(this.zNode, this.zNodeDataToBytes(), this.nodeStatus().getVersion());
+        } catch (KeeperException | InterruptedException e) {
+        }
+    }
+
+    public void notifyFinishConnection() {
+        this.numberOfConnections--;
+        try {
+            this.zookeeper.setData(this.zNode, this.zNodeDataToBytes(), this.nodeStatus().getVersion());
+        } catch (KeeperException | InterruptedException e) {
+        }
+    }
+
+    public Stat nodeStatus() throws KeeperException, InterruptedException {
+        return this.zookeeper.exists(this.zNode, false);
     }
 
     public static void showCommands() {
@@ -154,23 +174,20 @@ public final class App implements Watcher, DataMonitorListener {
     public static void shutdownServerListener() {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-
                 try {
                     Thread.sleep(200);
                     System.out.println("Desligando servidor...");
                     App.APP.finalize();
+                    Thread.sleep(200);
                 } catch (Throwable e) {
                 }
-
             }
-
         });
     }
 
     @Override
     public void exists(byte[] data) {
-        if (data == null) {
-        } else {
+        if (data != null) {
             try {
                 String zNodeStripped = this.zNode.replaceAll("\\/", "");
                 String hostPortStripped = String.valueOf(serverPort);
@@ -180,13 +197,6 @@ public final class App implements Watcher, DataMonitorListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // try {
-            System.out.println("Starting child");
-            // new StreamWriter(child.getInputStream(), System.out);
-            // new StreamWriter(child.getErrorStream(), System.err);
-            // } catch (IOException e) {
-            // e.printStackTrace();
-            // }
         }
     }
 
@@ -202,31 +212,8 @@ public final class App implements Watcher, DataMonitorListener {
         this.dataMonitor.process(event);
     }
 
-    static class StreamWriter extends Thread {
-        OutputStream os;
-        InputStream is;
-
-        StreamWriter(InputStream is, OutputStream os) {
-            this.is = is;
-            this.os = os;
-            start();
-        }
-
-        public void run() {
-            byte b[] = new byte[80];
-            int rc;
-            try {
-                while ((rc = is.read(b)) > 0) {
-                    os.write(b, 0, rc);
-                }
-            } catch (IOException e) {
-            }
-
-        }
-    }
-
     @Override
     protected void finalize() throws Throwable {
-        this.zookeeper.delete(this.zNode, 0);
+        this.zookeeper.delete(this.zNode, this.nodeStatus().getVersion());
     }
 }
